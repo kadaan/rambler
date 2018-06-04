@@ -8,6 +8,7 @@ import (
 
 	"github.com/bradfitz/slice"
 	"github.com/elwinar/rambler/driver"
+	_ "github.com/elwinar/rambler/driver/firebirdsql"
 	_ "github.com/elwinar/rambler/driver/mysql"
 	_ "github.com/elwinar/rambler/driver/postgresql"
 	_ "github.com/elwinar/rambler/driver/sqlite"
