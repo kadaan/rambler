@@ -5,13 +5,14 @@ import (
 	"io/ioutil"
 
 	"github.com/client9/xson/hjson"
+	"github.com/elwinar/rambler/env"
 	"github.com/imdario/mergo"
 )
 
 // Configuration is the configuration type
 type Configuration struct {
-	Environment
-	Environments map[string]Environment `json:"environments"`
+	env.Environment
+	Environments map[string]env.Environment `json:"environments"`
 }
 
 // Load open, read and parse the given configuration file
@@ -33,14 +34,14 @@ func Load(filename string) (Configuration, error) {
 }
 
 // Env return the requested environment from the configuration
-func (c Configuration) Env(name string) (Environment, error) {
+func (c Configuration) Env(name string) (env.Environment, error) {
 	if name == "default" {
 		return c.Environment, nil
 	}
 
 	env, found := c.Environments[name]
 	if !found {
-		return Environment{}, fmt.Errorf("unknown environment %s", name)
+		return env, fmt.Errorf("unknown environment %s", name)
 	}
 
 	_ = mergo.Merge(&env, c.Environment) // No error can possibly occur here

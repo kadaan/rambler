@@ -3,6 +3,8 @@ package main
 import (
 	"reflect"
 	"testing"
+
+	"github.com/elwinar/rambler/env"
 )
 
 func TestLoad(t *testing.T) {
@@ -25,7 +27,7 @@ func TestLoad(t *testing.T) {
 			input: "test/valid.json",
 			err:   false,
 			output: Configuration{
-				Environment: Environment{
+				Environment: env.Environment{
 					Driver:    "mysql",
 					Protocol:  "tcp",
 					Host:      "localhost",
@@ -36,7 +38,7 @@ func TestLoad(t *testing.T) {
 					Directory: ".",
 					Table:     "migrations",
 				},
-				Environments: map[string]Environment{
+				Environments: map[string]env.Environment{
 					"testing": {
 						Database: "rambler_testing",
 					},
@@ -53,7 +55,7 @@ func TestLoad(t *testing.T) {
 			input: "test/valid.hjson",
 			err:   false,
 			output: Configuration{
-				Environment: Environment{
+				Environment: env.Environment{
 					Driver:    "mysql",
 					Protocol:  "tcp",
 					Host:      "localhost",
@@ -64,7 +66,7 @@ func TestLoad(t *testing.T) {
 					Directory: ".",
 					Table:     "migrations",
 				},
-				Environments: map[string]Environment{
+				Environments: map[string]env.Environment{
 					"testing": {
 						Database: "rambler_testing",
 					},
@@ -96,17 +98,17 @@ func TestConfigurationEnv(t *testing.T) {
 	var cases = []struct {
 		input  string
 		err    bool
-		output Environment
+		output env.Environment
 	}{
 		{
 			input:  "unknown",
 			err:    true,
-			output: Environment{},
+			output: env.Environment{},
 		},
 		{
 			input: "default",
 			err:   false,
-			output: Environment{
+			output: env.Environment{
 				Driver:    "mysql",
 				Protocol:  "tcp",
 				Host:      "localhost",
@@ -121,7 +123,7 @@ func TestConfigurationEnv(t *testing.T) {
 		{
 			input: "testing",
 			err:   false,
-			output: Environment{
+			output: env.Environment{
 				Driver:    "mysql",
 				Protocol:  "tcp",
 				Host:      "localhost",
@@ -137,7 +139,7 @@ func TestConfigurationEnv(t *testing.T) {
 
 	for n, c := range cases {
 		cfg := Configuration{
-			Environment: Environment{
+			Environment: env.Environment{
 				Driver:    "mysql",
 				Protocol:  "tcp",
 				Host:      "localhost",
@@ -148,7 +150,7 @@ func TestConfigurationEnv(t *testing.T) {
 				Directory: ".",
 				Table:     "migrations",
 			},
-			Environments: map[string]Environment{
+			Environments: map[string]env.Environment{
 				"testing": {
 					Database: "rambler_testing",
 				},

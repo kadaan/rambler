@@ -14,6 +14,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Moved from github.com/codegangsta/cli to [github.com/urfave/cli](https://github.com/urfave/cli)
 
+### Internal
+
+- Moved the `Environment` structure to a sub-package to allow drivers to be independant
+- Removed `Environment.DSN` so the drivers can take up independantly
+
 ## [3.4.0](https://github.com/elwinar/rambler/releases/tag/v3.4.0) - 2016-10-27
 
 ### Added

@@ -2,11 +2,13 @@ package driver
 
 import (
 	"fmt"
+
+	"github.com/elwinar/rambler/env"
 )
 
 // Driver is the interface used by the program to initialize the database connection.
 type Driver interface {
-	New(dns, schema, table string) (Conn, error)
+	New(env.Environment) (Conn, error)
 }
 
 var drivers = make(map[string]Driver)
@@ -26,13 +28,13 @@ func Register(name string, driver Driver) error {
 }
 
 // Get initialize a driver from the given environment
-func Get(drv, dsn, schema, table string) (Conn, error) {
-	driver, found := drivers[drv]
+func Get(name string, environment env.Environment) (Conn, error) {
+	driver, found := drivers[name]
 	if !found {
-		return nil, fmt.Errorf(`driver "%s" not registered`, drv)
+		return nil, fmt.Errorf(`driver "%s" not registered`, name)
 	}
 
-	conn, err := driver.New(dsn, schema, table)
+	conn, err := driver.New(environment)
 	if err != nil {
 		return nil, err
 	}

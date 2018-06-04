@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/elwinar/rambler/driver"
+	"github.com/elwinar/rambler/env"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -14,23 +15,21 @@ func init() {
 
 type Driver struct{}
 
-func (d Driver) New(dsn, schema, table string) (driver.Conn, error) {
-	db, err := sql.Open("sqlite3", dsn)
+func (d Driver) New(e env.Environment) (driver.Conn, error) {
+	db, err := sql.Open("sqlite3", e.Database)
 	if err != nil {
 		return nil, err
 	}
 
 	return Conn{
-		db:     db,
-		schema: schema,
-		table:  table,
+		db:    db,
+		table: e.Table,
 	}, nil
 }
 
 type Conn struct {
-	db     *sql.DB
-	schema string
-	table  string
+	db    *sql.DB
+	table string
 }
 
 func (c Conn) HasTable() (bool, error) {

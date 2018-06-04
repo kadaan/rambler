@@ -5,7 +5,8 @@ import (
 	"fmt"
 
 	"github.com/elwinar/rambler/driver"
-	_ "github.com/go-sql-driver/mysql" // Where are working with the go-sql-driver/mysql driver for database/sql.
+	"github.com/elwinar/rambler/env"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func init() {
@@ -15,7 +16,8 @@ func init() {
 // Driver is the type that initialize new connections.
 type Driver struct{}
 
-func (d Driver) New(dsn, schema, table string) (driver.Conn, error) {
+func (d Driver) New(e env.Environment) (driver.Conn, error) {
+	dsn := fmt.Sprintf("%s:%s@%s(%s:%d)/%s", e.User, e.Password, e.Protocol, e.Host, e.Port, e.Database)
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
 		return nil, err
@@ -23,8 +25,8 @@ func (d Driver) New(dsn, schema, table string) (driver.Conn, error) {
 
 	return Conn{
 		db:     db,
-		schema: schema,
-		table:  table,
+		schema: e.Database,
+		table:  e.Table,
 	}, nil
 }
 

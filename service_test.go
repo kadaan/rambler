@@ -5,36 +5,38 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/elwinar/rambler/env"
 )
 
 func TestNewService(t *testing.T) {
 	var cases = []struct {
-		input Environment
+		input env.Environment
 		err   bool
 	}{
 		{
-			input: Environment{
+			input: env.Environment{
 				Driver:    "mysql",
 				Directory: "unkown",
 			},
 			err: true,
 		},
 		{
-			input: Environment{
+			input: env.Environment{
 				Driver:    "mysql",
 				Directory: "test/not_a_directory",
 			},
 			err: true,
 		},
 		{
-			input: Environment{
+			input: env.Environment{
 				Driver:    "unkown",
 				Directory: "test",
 			},
 			err: true,
 		},
 		{
-			input: Environment{
+			input: env.Environment{
 				Driver:    "mysql",
 				Directory: "test",
 			},
@@ -108,7 +110,7 @@ func TestServiceAvailable(t *testing.T) {
 
 	for n, c := range cases {
 		service := &Service{
-			env: Environment{
+			env: env.Environment{
 				Directory: c.directory,
 			},
 		}
@@ -190,7 +192,7 @@ func TestServiceApplied(t *testing.T) {
 
 	for n, c := range cases {
 		service := &Service{
-			env: Environment{
+			env: env.Environment{
 				Directory: c.directory,
 			},
 			conn: MockConn{

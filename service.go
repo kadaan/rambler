@@ -11,6 +11,7 @@ import (
 	_ "github.com/elwinar/rambler/driver/mysql"
 	_ "github.com/elwinar/rambler/driver/postgresql"
 	_ "github.com/elwinar/rambler/driver/sqlite"
+	"github.com/elwinar/rambler/env"
 )
 
 var (
@@ -22,11 +23,11 @@ var (
 // database and migrations on disk
 type Service struct {
 	conn driver.Conn
-	env  Environment
+	env  env.Environment
 }
 
 // NewService initialize a new service with the given environment
-func NewService(env Environment) (*Service, error) {
+func NewService(env env.Environment) (*Service, error) {
 	fi, err := os.Stat(env.Directory)
 	if err != nil {
 		return nil, fmt.Errorf("directory %s unavailable: %s", env.Directory, err.Error())
@@ -36,7 +37,7 @@ func NewService(env Environment) (*Service, error) {
 		return nil, fmt.Errorf("%s isn't a directory", env.Directory)
 	}
 
-	conn, err := driver.Get(env.Driver, env.DSN(), env.Database, env.Table)
+	conn, err := driver.Get(env.Driver, env)
 	if err != nil {
 		return nil, fmt.Errorf("unable to initialize driver: %s", err.Error())
 	}

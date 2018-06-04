@@ -5,7 +5,8 @@ import (
 	"fmt"
 
 	"github.com/elwinar/rambler/driver"
-	_ "github.com/lib/pq" // Working with the lib/pq PostgreSQL driver here.
+	"github.com/elwinar/rambler/env"
+	_ "github.com/lib/pq"
 )
 
 func init() {
@@ -16,7 +17,8 @@ func init() {
 type Driver struct{}
 
 // New returns a new connection.
-func (d Driver) New(dsn, schema, table string) (driver.Conn, error) {
+func (d Driver) New(e env.Environment) (driver.Conn, error) {
+	dsn := fmt.Sprintf("user=%s password=%s host=%s port=%d dbname=%s sslmode=disable", e.User, e.Password, e.Host, e.Port, e.Database)
 	db, err := sql.Open("postgres", dsn)
 	if err != nil {
 		return nil, err
@@ -24,8 +26,8 @@ func (d Driver) New(dsn, schema, table string) (driver.Conn, error) {
 
 	c := &Conn{
 		db:     db,
-		schema: schema,
-		table:  table,
+		schema: e.Database,
+		table:  e.Table,
 	}
 
 	return c, nil
