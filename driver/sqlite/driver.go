@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/elwinar/rambler/driver"
+	"github.com/kadaan/rambler/driver"
 	_ "github.com/mattn/go-sqlite3"
 )
 

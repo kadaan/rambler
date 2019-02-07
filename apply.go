@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/elwinar/rambler/log"
+	"github.com/kadaan/rambler/log"
 	"github.com/urfave/cli"
 )
 
