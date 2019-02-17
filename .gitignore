@@ -1,4 +1,5 @@
 dist/
+.idea/
 .vagrant
 .goxc.local.json
 

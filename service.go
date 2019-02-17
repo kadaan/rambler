@@ -3,14 +3,14 @@ package main
 import (
 	"errors"
 	"fmt"
-	"os"
-	"path/filepath"
-
 	"github.com/bradfitz/slice"
 	"github.com/kadaan/rambler/driver"
 	_ "github.com/kadaan/rambler/driver/mysql"
 	_ "github.com/kadaan/rambler/driver/postgresql"
 	_ "github.com/kadaan/rambler/driver/sqlite"
+	"os"
+	"path/filepath"
+	"strings"
 )
 
 var (
@@ -61,7 +61,8 @@ func (s Service) Initialize() error {
 // Available return the migrations in the environment's directory sorted in
 // ascending lexicographic order.
 func (s Service) Available() ([]*Migration, error) {
-	files, _ := filepath.Glob(filepath.Join(s.env.Directory, "*.sql")) // The only possible error here is a pattern error
+	files, _ := filepath.Glob(filepath.Join(s.env.Directory, fmt.Sprintf("*.%s",
+		strings.TrimLeft(s.env.Suffix, ".")))) // The only possible error here is a pattern error
 
 	var migrations []*Migration
 	for _, file := range files {

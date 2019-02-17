@@ -18,6 +18,7 @@ type Configuration struct {
 func Load(filename string) (Configuration, error) {
 	var c Configuration
 	c.Table = "migrations"
+	c.Suffix = ".sql"
 
 	raw, err := ioutil.ReadFile(filename)
 	if err != nil {

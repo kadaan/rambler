@@ -35,6 +35,7 @@ func TestLoad(t *testing.T) {
 					Database:  "rambler_default",
 					Directory: ".",
 					Table:     "migrations",
+					Suffix:    ".sql",
 				},
 				Environments: map[string]Environment{
 					"testing": {
@@ -63,6 +64,7 @@ func TestLoad(t *testing.T) {
 					Database:  "rambler_default",
 					Directory: ".",
 					Table:     "migrations",
+					Suffix:    ".sql",
 				},
 				Environments: map[string]Environment{
 					"testing": {
@@ -116,6 +118,7 @@ func TestConfigurationEnv(t *testing.T) {
 				Database:  "rambler_default",
 				Directory: ".",
 				Table:     "migrations",
+				Suffix:    ".sql",
 			},
 		},
 		{
@@ -131,6 +134,7 @@ func TestConfigurationEnv(t *testing.T) {
 				Database:  "rambler_testing",
 				Directory: ".",
 				Table:     "migrations",
+				Suffix:    ".sql",
 			},
 		},
 	}
@@ -147,6 +151,7 @@ func TestConfigurationEnv(t *testing.T) {
 				Database:  "rambler_default",
 				Directory: ".",
 				Table:     "migrations",
+				Suffix:    ".sql",
 			},
 			Environments: map[string]Environment{
 				"testing": {

@@ -16,6 +16,7 @@ type Environment struct {
 	Database  string `json:"database"`
 	Directory string `json:"directory"`
 	Table     string `json:"table"`
+	Suffix    string `json:"suffix"`
 }
 
 // DSN return the connection string for the current environment
