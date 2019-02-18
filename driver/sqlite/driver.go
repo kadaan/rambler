@@ -5,11 +5,12 @@ import (
 	"fmt"
 
 	"github.com/kadaan/rambler/driver"
+	// go-sqlite3 init registers the driver
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func init() {
-	driver.Register("sqlite", Driver{})
+	_ = driver.Register("sqlite", Driver{})
 }
 
 type Driver struct{}
@@ -48,11 +49,13 @@ func (c Conn) HasTable() (bool, error) {
 }
 
 func (c Conn) CreateTable() error {
+	// #nosec G201
 	_, err := c.db.Exec(fmt.Sprintf(`CREATE TABLE %s ( migration VARCHAR(255) NOT NULL );`, c.table))
 	return err
 }
 
 func (c Conn) GetApplied() ([]string, error) {
+	// #nosec G201
 	rows, err := c.db.Query(fmt.Sprintf(`SELECT migration FROM %s ORDER BY migration ASC`, c.table))
 	if err != nil {
 		return nil, err
@@ -74,11 +77,13 @@ func (c Conn) GetApplied() ([]string, error) {
 }
 
 func (c Conn) AddApplied(migration string) error {
+	// #nosec G201
 	_, err := c.db.Exec(fmt.Sprintf(`INSERT INTO %s (migration) VALUES (?)`, c.table), migration)
 	return err
 }
 
 func (c Conn) RemoveApplied(migration string) error {
+	// #nosec G201
 	_, err := c.db.Exec(fmt.Sprintf(`DELETE FROM %s WHERE migration = ?`, c.table), migration)
 	return err
 }

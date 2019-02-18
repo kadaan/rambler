@@ -4,12 +4,12 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/kadaan/rambler/driver"
 	_ "github.com/go-sql-driver/mysql" // Where are working with the go-sql-driver/mysql driver for database/sql.
+	"github.com/kadaan/rambler/driver"
 )
 
 func init() {
-	driver.Register("mysql", Driver{})
+	_ = driver.Register("mysql", Driver{})
 }
 
 // Driver is the type that initialize new connections.
@@ -52,12 +52,14 @@ func (c Conn) HasTable() (bool, error) {
 
 // CreateTable create the migration table using a MySQL-compatible syntax.
 func (c Conn) CreateTable() error {
+	// #nosec G201
 	_, err := c.db.Exec(fmt.Sprintf(`CREATE TABLE %s ( migration VARCHAR(255) NOT NULL, PRIMARY KEY(migration) ) DEFAULT CHARSET=utf8`, c.table))
 	return err
 }
 
 // GetApplied returns the list of already applied migrations.
 func (c Conn) GetApplied() ([]string, error) {
+	// #nosec G201
 	rows, err := c.db.Query(fmt.Sprintf(`SELECT migration FROM %s ORDER BY migration ASC`, c.table))
 	if err != nil {
 		return nil, err
@@ -80,12 +82,14 @@ func (c Conn) GetApplied() ([]string, error) {
 
 // AddApplied record that a migration was applied.
 func (c Conn) AddApplied(migration string) error {
+	// #nosec G201
 	_, err := c.db.Exec(fmt.Sprintf(`INSERT INTO %s (migration) VALUES (?)`, c.table), migration)
 	return err
 }
 
 // RemoveApplied record that a migration was reversed.
 func (c Conn) RemoveApplied(migration string) error {
+	// #nosec G201
 	_, err := c.db.Exec(fmt.Sprintf(`DELETE FROM %s WHERE migration = ?`, c.table), migration)
 	return err
 }

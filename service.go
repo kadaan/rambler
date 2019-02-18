@@ -3,13 +3,15 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/bradfitz/slice"
+
 	"github.com/kadaan/rambler/driver"
 	_ "github.com/kadaan/rambler/driver/mysql"
 	_ "github.com/kadaan/rambler/driver/postgresql"
 	_ "github.com/kadaan/rambler/driver/sqlite"
+
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 )
 
@@ -61,10 +63,14 @@ func (s Service) Initialize() error {
 // Available return the migrations in the environment's directory sorted in
 // ascending lexicographic order.
 func (s Service) Available() ([]*Migration, error) {
-	files, _ := filepath.Glob(filepath.Join(s.env.Directory, fmt.Sprintf("*.%s",
-		strings.TrimLeft(s.env.Suffix, ".")))) // The only possible error here is a pattern error
+	suffix := strings.TrimLeft(s.env.Suffix, ".")
+	if len(suffix) == 0 {
+		suffix = "sql"
+	}
+	files, _ := filepath.Glob(filepath.Join(s.env.Directory,
+		fmt.Sprintf("*.%s", suffix))) // The only possible error here is a pattern error
 
-	var migrations []*Migration
+	migrations := make([]*Migration, 0, len(files))
 	for _, file := range files {
 		migration, err := NewMigration(file)
 		if err != nil {
@@ -74,7 +80,7 @@ func (s Service) Available() ([]*Migration, error) {
 		migrations = append(migrations, migration)
 	}
 
-	slice.Sort(migrations, func(i, j int) bool {
+	sort.Slice(migrations, func(i, j int) bool {
 		return migrations[i].Name < migrations[j].Name
 	})
 
@@ -89,7 +95,7 @@ func (s Service) Applied() ([]*Migration, error) {
 		return nil, err
 	}
 
-	var migrations []*Migration
+	migrations := make([]*Migration, 0, len(files))
 	for _, file := range files {
 		migration, err := NewMigration(filepath.Join(s.env.Directory, file))
 		if err != nil {
@@ -99,7 +105,7 @@ func (s Service) Applied() ([]*Migration, error) {
 		migrations = append(migrations, migration)
 	}
 
-	slice.Sort(migrations, func(i, j int) bool {
+	sort.Slice(migrations, func(i, j int) bool {
 		return migrations[i].Name < migrations[j].Name
 	})
 

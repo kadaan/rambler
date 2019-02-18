@@ -15,7 +15,7 @@ func TestNewService(t *testing.T) {
 		{
 			input: Environment{
 				Driver:    "mysql",
-				Directory: "unkown",
+				Directory: "unknown",
 			},
 			err: true,
 		},
@@ -28,7 +28,7 @@ func TestNewService(t *testing.T) {
 		},
 		{
 			input: Environment{
-				Driver:    "unkown",
+				Driver:    "unknown",
 				Directory: "test",
 			},
 			err: true,
@@ -58,7 +58,7 @@ func TestServiceAvailable(t *testing.T) {
 	}{
 		{
 			directory:  "test/empty",
-			migrations: nil,
+			migrations: make([]*Migration, 0, 0),
 			err:        false,
 		},
 		{

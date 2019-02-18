@@ -9,7 +9,7 @@ import (
 )
 
 func init() {
-	driver.Register("postgresql", Driver{})
+	_ = driver.Register("postgresql", Driver{})
 }
 
 // Driver initialize new connections to a PostgreSQL database schema.
@@ -53,12 +53,14 @@ func (c *Conn) HasTable() (bool, error) {
 
 // CreateTable create the migration table using a PostgreSQL-compatible syntax.
 func (c *Conn) CreateTable() error {
+	// #nosec G201
 	_, err := c.db.Exec(fmt.Sprintf(`CREATE TABLE %s ( migration VARCHAR(255) NOT NULL );`, c.table))
 	return err
 }
 
 // GetApplied returns the list of applied migrations.
 func (c *Conn) GetApplied() ([]string, error) {
+	// #nosec G201
 	rows, err := c.db.Query(fmt.Sprintf(`SELECT migration FROM %s ORDER BY migration ASC`, c.table))
 	if err != nil {
 		return nil, err
@@ -81,12 +83,14 @@ func (c *Conn) GetApplied() ([]string, error) {
 
 // AddApplied records a migration as applied.
 func (c *Conn) AddApplied(migration string) error {
+	// #nosec G201
 	_, err := c.db.Exec(fmt.Sprintf(`INSERT INTO %s (migration) VALUES ($1)`, c.table), migration)
 	return err
 }
 
 // RemoveApplied records a migration as reversed.
 func (c *Conn) RemoveApplied(migration string) error {
+	// #nosec G201
 	_, err := c.db.Exec(fmt.Sprintf(`DELETE FROM %s WHERE migration = $1`, c.table), migration)
 	return err
 }

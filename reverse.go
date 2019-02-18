@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
+	"sort"
 
-	"github.com/bradfitz/slice"
 	"github.com/kadaan/rambler/log"
 	"github.com/urfave/cli"
 )
@@ -76,7 +76,7 @@ func reverse(service Servicer, all bool, logger *log.Logger) error {
 	}
 
 	logger.Debug("reversing order of applied migrations")
-	slice.Sort(applied, func(i, j int) bool {
+	sort.Slice(applied, func(i, j int) bool {
 		return applied[i].Name > applied[j].Name
 	})
 
