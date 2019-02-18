@@ -10,7 +10,7 @@ builds:
   - env:
       - CGO_ENABLED=0
     ldflags:
-      - -s -linkmode external -extldflags -static -w -X main.VERSION={{.Version}}
+      - -s -w -X main.VERSION={{.Version}}
     goos:
       - windows
       - darwin
